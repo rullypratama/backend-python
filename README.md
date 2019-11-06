@@ -1,5 +1,5 @@
-SMS Backend Coordinator API
-===========================
+Backend Coordinator API
+=======================
 
 This API is responsible for performing our business logic related to sms processes
 as well
