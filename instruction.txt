@@ -1,0 +1,20 @@
+// create database
+docker-compose up
+// build application image
+docker build -t backend-app:v0 .
+// run application migrations
+docker run --env DB_HOST=172.17.0.1 backend-app:v0 sh -c "python manage.py makemigrations && python manage.py migrate"
+// run application
+docker run --net=host -i -t --env DB_HOST=0.0.0.0 backend-app:v0 sh
+docker run -i -t --env DB_HOST=172.17.0.1 backend-app:v0 sh
+// and create superuser
+python manage.py createsuperuser
+// run collect static
+docker run -i -t --env DB_HOST=172.17.0.1 backend-app:v0 sh -c "python manage.py collectstatic --noinput"
+// run application
+docker run -i -t --env DB_HOST=172.17.0.1 -p 80:8000 backend-app:v0
+docker run  -i -t --env DB_HOST=172.17.0.1 -p 8000:8000 backend-app:v0 sh -c "python manage.py runserver"
+// run application with gunicorn
+docker run -e DB_HOST=172.17.0.1 -e DOMAIN_NAME=172.17.128.49 -p 80:8000 backend-app:v0
+
+//docker ip = 172.17.0.1
